@@ -42,6 +42,25 @@ Load save.txt
 
 should see updated HP and preserved queue order.
 
+*** Main logic (primitive, needs polishing later):
+We have one Queue that runs throughout the game. 
+When the game starts, Knight, 
+, which is a struct inside a node created by the create_node function, 
+is added to the queue. this is completed by enqueue, 
+pointing the pointer Node* front to the Knight. 
+and then the Archer and the Orc is added, 
+each one added update the rear pointer to itself. 
+And then, we dequeue each single Hero one by one 
+(everyone by the end of the turn will be out of the queue). 
+First the temp pointer points to the front of the queue, the Knight. 
+then we copy the data of Knight into the local variable fighter. 
+and then we change the pointer of the front pointer 
+from queue to the next node in the linked list that is 
+Queue (with each hero being a node), so the pointer of the 
+front is now Archer. and then we free the Knight out of the 
+Queue, which was malloced earlier in create node. 
+and we return the fighter data, which is the Knight.
+
 *** Makefile documentation
 
 CC = gcc							// set the compiler to gc

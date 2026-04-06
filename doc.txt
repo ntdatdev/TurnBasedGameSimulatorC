@@ -1,0 +1,72 @@
+
+*** How to compile and run:
+choose terminal bash
+mingw32-make --version
+./battle
+
+
+*** To clean compiled files:
+make clean
+
+*** Test
+
+- Add 4 fighters
+Knight, team 1, hp 100, attack 20
+Archer, team 1, hp 80, attack 15
+Orc, team 2, hp 120, attack 18
+Goblin, team 2, hp 60, attack 10
+Show fighters
+
+- Process next turn
+
+Knight attacks Orc.
+
+Process next turn
+
+Archer attacks Orc.
+
+- Save game
+
+Use a filename like save.txt
+
+- Exit
+
+- Run program again
+
+Load save.txt
+
+- Show fighters
+
+should see updated HP and preserved queue order.
+
+*** Makefile documentation
+
+CC = gcc							// set the compiler to gc
+CFLAGS = -Wall -Wextra -Werror -g	// set the compiler flags to enable all warnings 
+									// and include debug information
+OBJ = main.o queue.o file.o			// defines the object files that will be created from the .c files
+TARGET = battle						// defines the final executable name as "battle"
+
+$(TARGET): $(OBJ)					// rule: to build "battle", we need the 
+									// object files main.o, queue.o, and file.o
+	$(CC) $(OBJ) -o $(TARGET)		// once those object files exist, link them together into the executable "battle"
+									// gcc main.o queue.o file.o -o battle
+
+main.o: main.c queue.h file.h		// main.o depends on
+									// main.c, queue.h, and file.h because main.c includes those header files
+	$(CC) $(CFLAGS) -c main.c		// compile main.c into main.o without linking
+
+queue.o: queue.c queue.h			// queue.o depends on queue.c and queue.h because queue.c includes queue.h
+	$(CC) $(CFLAGS) -c queue.c		// compile queue.c into queue.o without linking
+
+file.o: file.c file.h queue.h		// file.o depends on file.c, file.h, and queue.h because file.c includes those header files
+	$(CC) $(CFLAGS) -c file.c 		// compile file.c into file.o without linking
+
+clean:								// define a cleanup rule
+	rm -f $(OBJ) $(TARGET)			// deletes all objects files and the executables when "make clean" is run in the terminal
+
+/* In other words, this Makefile say:
+1. Compile each .c file into a corresponding .o file
+2. Link the object files to create the final executable
+3. Provide a clean rule to remove generated files */
+

@@ -1,12 +1,15 @@
 
 *** How to compile and run:
 choose terminal bash
-mingw32-make --version
+mingw32-make 
 ./battle
 
 
 *** To clean compiled files:
-make clean
+mingw32-make clean
+
+*** check version
+mingw32-make --version
 
 *** Test
 

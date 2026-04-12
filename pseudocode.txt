@@ -1,0 +1,295 @@
+*** main()
+Start program
+
+Create an empty queue of fighters
+Create variables for menu choice and filename
+
+Initialize the queue
+
+Repeat until user chooses Exit:
+    Show the menu:
+        1. Add fighter
+        2. Show fighters
+        3. Process next turn
+        4. Save game
+        5. Load game
+        6. Exit
+
+    Ask the user for a choice
+
+    If choice is 1:
+        Create a new fighter
+        Ask user for fighter ID
+        Ask user for fighter name
+        Ask user for fighter team
+        Ask user for fighter HP
+        Ask user for fighter attack
+        Add fighter to the queue
+        Print "Fighter added"
+
+    Else if choice is 2:
+        Show all fighters in the queue
+
+    Else if choice is 3:
+        Process the next fighter's turn
+
+    Else if choice is 4:
+        Ask user for filename
+        Save the game to that file
+
+    Else if choice is 5:
+        Ask user for filename
+        Load the game from that file
+
+    Else if choice is 6:
+        Print "Exiting program"
+
+    Else:
+        Print "Invalid choice"
+
+Free all remaining queue memory
+End program
+
+
+
+
+*** save_game(q, filename)
+
+Open the file for writing
+
+If the file could not be opened:
+    Print an error message
+    Stop the function
+
+Start at the front of the queue
+
+While there is still a fighter node:
+    Write that fighter's data into the file
+    Move to the next node
+
+Close the file
+Print "Game saved successfully"
+
+
+
+
+
+*** load_game(q, filename)
+
+Open the file for reading
+
+If the file could not be opened:
+    Print an error message
+    Stop the function
+
+Delete all fighters currently in the queue
+Re-initialize the queue so it is empty
+
+While a full fighter record can be read from the file:
+    Store the data into a fighter variable
+    Add that fighter to the queue
+
+Close the file
+Print "Game loaded successfully"
+
+
+
+
+
+*** init_queue(q)
+
+Set the front of the queue to nothing
+Set the rear of the queue to nothing
+is_empty(q)
+If the front of the queue is nothing:
+    Return true
+Otherwise:
+    Return false
+
+
+
+
+
+*** create_node(fighter)
+
+Create memory for one new node
+
+If memory allocation fails:
+    Print an error message
+    End the program
+
+Put the fighter data into the new node
+Set the new node's next pointer to nothing
+
+Return the new node
+
+
+
+
+
+*** enqueue(q, fighter)
+Create a new node containing the fighter
+
+If the queue is empty:
+    Make this node the front of the queue
+    Make this node the rear of the queue
+Otherwise:
+    Link the current rear node to the new node
+    Update the rear to be the new node
+dequeue(q)
+Create an empty fighter to use in case the queue is empty
+
+If the queue is empty:
+    Print "Queue is empty"
+    Return the empty fighter
+
+Store the front node in a temporary variable
+Copy the fighter data from that node
+
+Move the front pointer to the next node
+
+If the queue is now empty:
+    Set the rear to nothing
+
+Free the old front node from memory
+
+Return the fighter data that was removed
+
+
+
+
+
+*** display_fighters(q)
+Start at the front of the queue
+
+If the queue is empty:
+    Print "No fighters in queue"
+    Stop the function
+
+Print a heading
+
+While the current node exists:
+    Print the fighter's ID, name, team, HP, and attack
+    Move to the next node
+
+
+
+
+
+*** team_alive(q, team)
+
+Start at the front of the queue
+
+While the current node exists:
+    If this fighter belongs to the given team
+    AND this fighter has more than 0 HP:
+        Return true
+
+    Move to the next node
+
+Return false
+
+
+
+
+
+*** find_first_enemy(q, attacker_team)
+
+Start at the front of the queue
+
+While the current node exists:
+    If this fighter is on a different team from the attacker
+    AND this fighter has more than 0 HP:
+        Return this node
+
+    Move to the next node
+
+Return nothing
+
+
+
+
+
+*** remove_dead_fighters(q)
+
+Set current to the front of the queue
+Set previous to nothing
+
+While current exists:
+    If current fighter has 0 or less HP:
+        Mark current node for deletion
+
+        If previous is nothing:
+            This dead fighter is at the front
+            Move the front pointer to the next node
+            Move current to the new front
+        Otherwise:
+            Make previous skip over current
+            Move current to the next node
+
+        If the deleted node was the rear:
+            Update rear to previous
+
+        Free the deleted node from memory
+
+    Otherwise:
+        Move previous forward to current
+        Move current forward to the next node
+
+
+
+
+
+*** process_turn(q)
+If the queue is empty:
+    Print "No fighters in queue"
+    Stop the function
+
+If Team 1 has no living fighters:
+    Print "Team 2 wins"
+    Stop the function
+
+If Team 2 has no living fighters:
+    Print "Team 1 wins"
+    Stop the function
+
+Remove the fighter at the front of the queue
+Call this fighter the attacker
+
+If the attacker already has 0 or less HP:
+    Print that the attacker is defeated and cannot act
+    Remove all dead fighters from the queue
+    Stop the function
+
+Find the first living enemy of the attacker
+
+If no enemy is found:
+    Print "No enemy found"
+    Stop the function
+
+Print that the attacker attacks the enemy
+Reduce the enemy's HP by the attacker's attack value
+
+If the enemy's HP is now 0 or less:
+    Print that the enemy has been defeated
+Otherwise:
+    Print the enemy's remaining HP
+
+If the attacker is still alive:
+    Put the attacker back at the end of the queue
+
+Remove all dead fighters from the queue
+
+If Team 1 has no living fighters:
+    Print "Team 2 wins"
+Else if Team 2 has no living fighters:
+    Print "Team 1 wins"
+
+
+
+
+
+*** free_queue(q)
+
+While the queue is not empty:
+    Remove the front fighter from the queue

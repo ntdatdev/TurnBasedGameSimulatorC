@@ -170,17 +170,17 @@ void remove_dead_fighters(Queue* q) {
 void process_turn(Queue* q) {
     if (is_empty(q)) {
         printf("No fighters in queue.\n");
-        return;
+        return; // if queue is empty, we can't process a turn, so we just return early
     }
 
     if (!team_alive(q, 1)) {
         printf("Team 2 wins!\n");
-        return;
+        return; // if Team 1 has no alive fighters, Team 2 wins, so we print that and return early
     }
 
     if (!team_alive(q, 2)) {
         printf("Team 1 wins!\n");
-        return;
+        return; // if Team 2 has no alive fighters, Team 1 wins, so we print that and return early
     }
 
     Fighter attacker = dequeue(q);
@@ -188,44 +188,52 @@ void process_turn(Queue* q) {
     if (attacker.hp <= 0) {
         printf("%s is already defeated and cannot act.\n", attacker.name);
         remove_dead_fighters(q);
-        return;
+        return; // if the attacker is already dead, they can't attack, so we print that, remove any dead fighters from the queue, and return early
     }
 
     Node* enemy = find_first_enemy(q, attacker.team);
 
     if (enemy == NULL) {
         printf("No enemy found.\n");
-        return;
+        return; // if we can't find any alive enemies, we can't attack, so we print that and return early
     }
 
     printf("%s attacks %s for %d damage!\n",
            attacker.name,
            enemy->data.name,
-           attacker.attack);
+           attacker.attack); // print out the attack action
 
     enemy->data.hp -= attacker.attack;
 
     if (enemy->data.hp <= 0) {
-        printf("%s has been defeated!\n", enemy->data.name);
+        printf("%s has been defeated!\n", enemy->data.name); // if the enemy's HP drops to 0 or below, 
+                                                            // they are defeated, so we print that  
+        
     } else {
         printf("%s now has %d HP.\n", enemy->data.name, enemy->data.hp);
+        // if the enemy is still alive, we print out their remaining HP
     }
 
     if (attacker.hp > 0) {
         enqueue(q, attacker);
-    }
+    } // if the attacker is still alive after their turn, 
+    // we put them back in the queue to fight again later
 
-    remove_dead_fighters(q);
+    remove_dead_fighters(q); // after each turn, we remove any fighters 
+                            //that have been defeated from the queue
 
     if (!team_alive(q, 1)) {
-        printf("Team 2 wins!\n");
+        printf("Team 2 wins!\n"); // if Team 1 has no alive fighters, 
+                                 //      Team 2 wins, so we print that
     } else if (!team_alive(q, 2)) {
-        printf("Team 1 wins!\n");
+        printf("Team 1 wins!\n"); // if Team 2 has no alive fighters, 
+                                //      Team 1 wins, so we print that
     }
 }
 
 void free_queue(Queue* q) {
     while (!is_empty(q)) {
         dequeue(q);
-    }
+    } // we can just keep dequeuing until the queue is empty, 
+    // which will free all the nodes
 }

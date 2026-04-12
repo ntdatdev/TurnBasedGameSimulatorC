@@ -46,7 +46,7 @@ should see updated HP and preserved queue order.
 We have one Queue that runs throughout the game. 
 When the game starts, Knight, 
 , which is a struct inside a node created by the create_node function, 
-is added to the queue. this is completed by enqueue, 
+is added to the queue. this is completed by function enqueue, 
 pointing the pointer Node* front to the Knight. 
 and then the Archer and the Orc is added, 
 each one added update the rear pointer to itself. 
